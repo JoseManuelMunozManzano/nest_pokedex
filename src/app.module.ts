@@ -13,7 +13,7 @@ import { PokemonModule } from './pokemon/pokemon.module';
     }),
 
     // Referencia a la BBDD. Luego se hará con variables de entorno
-    MongooseModule.forRoot('mongodb://localhost:27017/nest-pokemon'),
+    MongooseModule.forRoot('mongodb://localhost:27018/nest-pokemon'),
 
     PokemonModule,
   ],
