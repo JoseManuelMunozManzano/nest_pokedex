@@ -79,16 +79,12 @@ export class PokemonService {
   }
 
   async remove(id: string) {
-    // Para evitar que no se devuelva nada cuando realmente el id de Mongo no existe.
-    // Ahora devuelve, si no existe:
-    // {
-    //    "acknowledged": true,
-    //    "deletedCount": 0
-    // }
-    // Y en este código desestructuramos el deletedCount
-    const { deletedCount } = await this.pokemonModel.deleteOne({ _id: id });
-    if (deletedCount === 0)
-      throw new BadRequestException(`Pokemon with id "${id}" not found`);
+    // Y otra forma de hacer lo mismo pero devolviendo el valor borrado sería.
+    const result = await this.pokemonModel.findByIdAndDelete(id);
+    if (!result) {
+      throw new BadRequestException(`${id} not found in db`);
+    }
+    return result;
   }
 
   private handleExceptions(error: any) {
