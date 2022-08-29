@@ -75,8 +75,20 @@ export class PokemonService {
     return pokemon;
   }
 
-  update(id: number, updatePokemonDto: UpdatePokemonDto) {
-    return `This action updates a #${id} pokemon`;
+  async update(term: string, updatePokemonDto: UpdatePokemonDto) {
+    const pokemon = await this.findOne(term);
+
+    if (updatePokemonDto.name)
+      updatePokemonDto.name = updatePokemonDto.name.toLocaleLowerCase();
+
+    // Con new: true devolveríamos el nuevo objeto. Si no se pone regresa el valor anterior.
+    // Pero no funciona
+    //await pokemon.updateOne(updatePokemonDto, { new: true });
+    await pokemon.updateOne(updatePokemonDto);
+
+    // En vez del new: true devolvemos el pokemon actualizado y sobreescribimos los
+    // valores con updatePokemonDto
+    return { ...pokemon.toJSON(), ...updatePokemonDto };
   }
 
   remove(id: number) {
