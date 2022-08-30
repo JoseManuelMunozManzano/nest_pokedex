@@ -16,28 +16,28 @@ export class SeedService {
   ) {}
 
   async executeSeed() {
-    // Borramos todo antes de insertar para evitar insertar duplicados
     await this.pokemonModel.deleteMany();
 
     const { data } = await this.axios.get<PokeResponse>(
       'https://pokeapi.co/api/v2/pokemon?limit=3',
     );
 
-    // Forma 1 de evitar esperar en cada inserción.
-    //   Con promesas donde al final se insertan todas de forma simultanea
-    const insertPromisesArray = [];
+    // Forma 2 de evitar esperar en cada inserción (FORMA OPTIMA)
+    //   Con arreglos e insertMany (por eso paso Mongoose en vez de PokemonService)
+    //   donde solo se hace una inserción
+    const pokemonToInsert: { name: string; no: number }[] = [];
 
     data.results.forEach(({ name, url }) => {
       const segments = url.split('/');
       const no: number = +segments[segments.length - 2];
 
       // Se evita hacer un await a cada una de las peticiones
-      // Problema: Se hacen múltiples inserciones
-      insertPromisesArray.push(this.pokemonModel.create({ name, no }));
+      // Tenemos un arreglo aquí
+      pokemonToInsert.push({ name, no });
     });
 
-    // Aquí se hacen todas las inserciones de manera simultanea
-    await Promise.all(insertPromisesArray);
+    // Aquí se hace solo 1 inserción con un montón de entradas, pero solo 1 inserción
+    await this.pokemonModel.insertMany(pokemonToInsert);
 
     return 'Seed Executed';
   }
