@@ -32,7 +32,10 @@ export class PokemonService {
   }
 
   findAll() {
-    return `This action returns all pokemon`;
+    // Con limit se indica la cantidad de pokemon que se quieren obtener
+    // Con skip indicamos que se salte una cantidad de pokemon antes de obtener la cantidad que queremos.
+    //    En el ejemplo traería los pokemon 5, 6, 7, 8 y 9
+    return this.pokemonModel.find().limit(5).skip(4);
   }
 
   // Asíncrono porque hay que hacer conexiones a la BD
