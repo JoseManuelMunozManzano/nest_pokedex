@@ -10,6 +10,7 @@ import { InjectModel } from '@nestjs/mongoose';
 
 import { CreatePokemonDto } from './dto/create-pokemon.dto';
 import { UpdatePokemonDto } from './dto/update-pokemon.dto';
+import { PaginationDto } from '../common/dto/pagination.dto';
 
 @Injectable()
 export class PokemonService {
@@ -31,11 +32,18 @@ export class PokemonService {
     }
   }
 
-  findAll() {
-    // Con limit se indica la cantidad de pokemon que se quieren obtener
-    // Con skip indicamos que se salte una cantidad de pokemon antes de obtener la cantidad que queremos.
-    //    En el ejemplo traería los pokemon 5, 6, 7, 8 y 9
-    return this.pokemonModel.find().limit(5).skip(4);
+  findAll(paginationDto: PaginationDto) {
+    // Desestructuración y valores por defecto
+    const { limit = 10, offset = 0 } = paginationDto;
+
+    // Se indica que ordene por la columna no de manera ascendente (1). Descendente sería con (-1)
+    // Con select y el signo menos indicamos que no queremos enviar el campo __v
+    return this.pokemonModel
+      .find()
+      .limit(limit)
+      .skip(offset)
+      .sort({ no: 1 })
+      .select('-__v');
   }
 
   // Asíncrono porque hay que hacer conexiones a la BD
