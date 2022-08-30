@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { PokemonService } from './pokemon.service';
-import { PokemonController } from './pokemon.controller';
 import { MongooseModule } from '@nestjs/mongoose';
+import { PokemonController } from './pokemon.controller';
 import { Pokemon, PokemonSchema } from './entities/pokemon.entity';
 
 @Module({
@@ -17,5 +17,9 @@ import { Pokemon, PokemonSchema } from './entities/pokemon.entity';
       },
     ]),
   ],
+  // Tenemos que exportar para acceder a el fuera de este módulo.
+  // Esto es lo que el mundo externo va a conocer de este módulo.
+  // También se podría haber exportado PokemonService (el servicio) en vez de Mongoose
+  exports: [MongooseModule],
 })
 export class PokemonModule {}
