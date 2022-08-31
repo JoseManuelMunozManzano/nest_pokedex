@@ -19,6 +19,7 @@ async function bootstrap() {
     }),
   );
 
+  // El puerto también se pasa desde la variable de entorno que indica el fichero .env
   await app.listen(3000);
 }
 bootstrap();
