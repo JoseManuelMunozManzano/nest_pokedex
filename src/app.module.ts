@@ -8,11 +8,15 @@ import { PokemonModule } from './pokemon/pokemon.module';
 import { CommonModule } from './common/common.module';
 import { SeedModule } from './seed/seed.module';
 import { EnvConfiguration } from './config/app.config';
+import { JoiValidationschema } from './config/joi.validation';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
+      // El load y el ValidationSchema pueden trabajar juntos aunque en principio en nuestro ejemplo
+      // si que hacen lo mismo
       load: [EnvConfiguration],
+      validationSchema: JoiValidationschema,
     }),
 
     ServeStaticModule.forRoot({
