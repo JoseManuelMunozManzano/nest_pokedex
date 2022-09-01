@@ -15,11 +15,11 @@ import { PaginationDto } from '../common/dto/pagination.dto';
 @Injectable()
 export class PokemonService {
   constructor(
-    // El modelo por si solo no es inyectable porque no es un provider. Por eso, para inyectarlo hace falta
-    // el decorador e indicarle el nombre del modelo
     @InjectModel(Pokemon.name)
     private readonly pokemonModel: Model<Pokemon>,
-  ) {}
+  ) {
+    // console.log(process.env.DEFAULT_LIMIT);
+  }
 
   async create(createPokemonDto: CreatePokemonDto) {
     createPokemonDto.name = createPokemonDto.name.toLocaleLowerCase();
@@ -33,11 +33,12 @@ export class PokemonService {
   }
 
   findAll(paginationDto: PaginationDto) {
-    // Desestructuración y valores por defecto
-    const { limit = 10, offset = 0 } = paginationDto;
+    // Ahora, el valor por defecto de limit lo coge del fichero .env.
+    // Si el programador no creo esa variable de entorno, entonces tenemos un NaN y lo que
+    // hace Nest es extraño porque NaN es un número y se devuelven todos los pokemon.
+    // Es decir, esto no falla!!!
+    const { limit = +process.env.DEFAULT_LIMIT, offset = 0 } = paginationDto;
 
-    // Se indica que ordene por la columna no de manera ascendente (1). Descendente sería con (-1)
-    // Con select y el signo menos indicamos que no queremos enviar el campo __v
     return this.pokemonModel
       .find()
       .limit(limit)
