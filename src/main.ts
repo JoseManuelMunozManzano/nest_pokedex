@@ -26,3 +26,8 @@ async function bootstrap() {
   console.log(`App running on port ${process.env.PORT}`);
 }
 bootstrap();
+
+// Notas para HEROKU
+// En package.json se han cambiado scripts de ejecución por Heroku, ya que este busca el script start.
+// En este fuente hay que hacer referencia a process.env.PORT, ya que Heroku nos va a dar el valor de este
+// puerto basado en las variables de entorno.
