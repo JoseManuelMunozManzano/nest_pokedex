@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
-import { PokemonService } from './pokemon.service';
+import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
+import { PokemonService } from './pokemon.service';
 import { PokemonController } from './pokemon.controller';
 import { Pokemon, PokemonSchema } from './entities/pokemon.entity';
 
@@ -8,6 +9,9 @@ import { Pokemon, PokemonSchema } from './entities/pokemon.entity';
   controllers: [PokemonController],
   providers: [PokemonService],
   imports: [
+    // Se importa el ConfigModule para poder usar ConfigService en pokemon.service.ts
+    ConfigModule,
+
     // Para crear la referencias con nuestra colección basado en el esquema que acabamos de crear
     // El name que aparece en Pokemon.name sale de extender de Document. No es el campo name.
     MongooseModule.forFeature([
