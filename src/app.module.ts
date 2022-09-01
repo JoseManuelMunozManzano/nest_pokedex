@@ -11,12 +11,6 @@ import { EnvConfiguration } from './config/app.config';
 
 @Module({
   imports: [
-    // Adicionalmente al Configuration Root, cuando hacemos uso de las variables de entorno dentro de un
-    // building block (provider, servicio, controlador) se recomienda que hagamos uso del Configuration
-    // Module, pero este ofrece un servicio que nos va a permitir hacer la inyección de dependencias de
-    // las variables de entorno, entre otras cosas.
-    // Ver pokemon.service.ts y carpeta config, fichero app.config.ts
-    // Ahora se usa el archivo app.config.ts para validar las variables de entorno.
     ConfigModule.forRoot({
       load: [EnvConfiguration],
     }),
@@ -34,8 +28,4 @@ import { EnvConfiguration } from './config/app.config';
     SeedModule,
   ],
 })
-export class AppModule {
-  constructor() {
-    console.log(process.env);
-  }
-}
+export class AppModule {}

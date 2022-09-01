@@ -16,24 +16,14 @@ import { PaginationDto } from '../common/dto/pagination.dto';
 
 @Injectable()
 export class PokemonService {
+  private defaultLimit: number;
+
   constructor(
     @InjectModel(Pokemon.name)
     private readonly pokemonModel: Model<Pokemon>,
     private readonly configService: ConfigService,
   ) {
-    // El valor es undefined!!
-    // Por qué? En los building blocks, servicios, o cualquier cosa que nos permita hacer inyección de
-    // dependencias, no se hace directamente de process.env, si no desde un servicio que el ConfigModule
-    // (en app.module.ts) nos ofrece, porque el ConfigModule es quién procesó, validó y se ejecutó para
-    // preparar variables de entorno.
-    console.log(process.env.DEFAULT_LIMIT);
-
-    const defaultLimit = configService.get<number>('defaultLimit');
-    // Es el ConfigurationService inyectado arriba
-    // Ahora tenemos aquí el valor indicado en app.config.ts
-    // Con getOrThrow('jwt-seed'), si no obtenemos la variable de entorno 'jwt-seed' lanzamos un error.
-    // Con get(defaultLimit) si no obtenemos la variable de entorno se devuelve 7 (ver app.config.ts)
-    console.log({ defaultLimit });
+    this.defaultLimit = configService.get<number>('defaultLimit');
   }
 
   async create(createPokemonDto: CreatePokemonDto) {
@@ -48,7 +38,7 @@ export class PokemonService {
   }
 
   findAll(paginationDto: PaginationDto) {
-    const { limit = 5, offset = 0 } = paginationDto;
+    const { limit = this.defaultLimit, offset = 0 } = paginationDto;
 
     return this.pokemonModel
       .find()

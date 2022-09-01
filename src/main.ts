@@ -20,6 +20,9 @@ async function bootstrap() {
   );
 
   // El puerto también se pasa desde la variable de entorno que indica el fichero .env
-  await app.listen(3000);
+  // Aquí no se puede realizar inyección de dependencias porque estamos fuera de un building block.
+  // No se puede usar app.config.ts. Se usa directamente process.env
+  await app.listen(process.env.PORT);
+  console.log(`App running on port ${process.env.PORT}`);
 }
 bootstrap();
