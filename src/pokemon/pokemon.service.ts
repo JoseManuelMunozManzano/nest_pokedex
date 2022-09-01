@@ -18,7 +18,12 @@ export class PokemonService {
     @InjectModel(Pokemon.name)
     private readonly pokemonModel: Model<Pokemon>,
   ) {
-    // console.log(process.env.DEFAULT_LIMIT);
+    // El valor es undefined!!
+    // Por qué? En los building blocks, servicios, o cualquier cosa que nos permita hacer inyección de
+    // dependencias, no se hace directamente de process.env, si no desde un servicio que el ConfigModule
+    // (en app.module.ts) nos ofrece, porque el ConfigModule es quién procesó, validó y se ejecutó para
+    // preparar variables de entorno.
+    console.log(process.env.DEFAULT_LIMIT);
   }
 
   async create(createPokemonDto: CreatePokemonDto) {
@@ -33,11 +38,7 @@ export class PokemonService {
   }
 
   findAll(paginationDto: PaginationDto) {
-    // Ahora, el valor por defecto de limit lo coge del fichero .env.
-    // Si el programador no creo esa variable de entorno, entonces tenemos un NaN y lo que
-    // hace Nest es extraño porque NaN es un número y se devuelven todos los pokemon.
-    // Es decir, esto no falla!!!
-    const { limit = +process.env.DEFAULT_LIMIT, offset = 0 } = paginationDto;
+    const { limit = 5, offset = 0 } = paginationDto;
 
     return this.pokemonModel
       .find()
