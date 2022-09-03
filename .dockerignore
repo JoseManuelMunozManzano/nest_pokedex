@@ -1,0 +1,6 @@
+# Archivos que no queremos que el comando COPY del fichero Dockerfile copie
+dist/
+node_modules/
+.gitignore
+
+.git/
